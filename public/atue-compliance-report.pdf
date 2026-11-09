@@ -1,0 +1,75 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 3649 >>
+stream
+0.09 0.09 0.11 rg BT /F2 22 Tf 52 790 Td (ATUE) Tj ET
+0.42 0.42 0.45 rg BT /F1 9 Tf 52 774 Td (Conformidade e privacidade) Tj ET
+0.15 0.39 0.92 rg BT /F2 8 Tf 447 788 Td (DEMONSTRAÇÃO) Tj ET
+0.15 0.39 0.92 RG 1.5 w 52 762 m 543 762 l S
+0.09 0.09 0.11 rg BT /F2 20 Tf 52 726 Td (Relatório de Conformidade) Tj ET
+0.42 0.42 0.45 rg BT /F1 11 Tf 52 708 Td (Documento estático de demonstração para o Demoday) Tj ET
+0.97 0.98 1 rg 52 626 491 54 re f
+0.15 0.39 0.92 RG 3 w 52 626 m 52 680 l S
+0.09 0.09 0.11 rg BT /F2 10 Tf 66 662 Td (Aviso de demonstração) Tj ET
+0.32 0.32 0.36 rg BT /F1 9 Tf 66 646 Td (Este relatório é fictício e gerado a partir de mocks. Não representa uma auditoria real) Tj ET
+0.32 0.32 0.36 rg BT /F1 9 Tf 66 634 Td (nem garantia de conformidade com a LGPD ou qualquer norma de segurança.) Tj ET
+0.09 0.09 0.11 rg BT /F2 13 Tf 52 592 Td (Resumo executivo) Tj ET
+0.2 0.2 0.23 rg BT /F1 10 Tf 52 572 Td (A avaliação simulada considera sinais públicos de transparência, segurança e governança de) Tj ET
+0.2 0.2 0.23 rg BT /F1 10 Tf 52 557 Td (dados. O resultado organiza os achados por nível de risco e propõe um plano de adequação) Tj ET
+0.2 0.2 0.23 rg BT /F1 10 Tf 52 542 Td (priorizado.) Tj ET
+0.2 0.2 0.23 rg BT /F1 10 Tf 52 521 Td (Os cenários da demonstração cobrem uma operação de e-commerce, uma clínica médica e uma agência) Tj ET
+0.2 0.2 0.23 rg BT /F1 10 Tf 52 506 Td (B2B. Cada empresa possui score, achados e recomendações próprios, definidos em mocks locais.) Tj ET
+0.2 0.2 0.23 rg BT /F1 10 Tf 52 485 Td (Nenhum site real é acessado durante a execução. O objetivo é demonstrar a experiência do) Tj ET
+0.2 0.2 0.23 rg BT /F1 10 Tf 52 470 Td (produto, não produzir um diagnóstico oficial.) Tj ET
+0.09 0.09 0.11 rg BT /F2 13 Tf 52 445 Td (Achados avaliados) Tj ET
+0.15 0.39 0.92 rg 52 428 3 3 re f
+0.2 0.2 0.23 rg BT /F1 10 Tf 64 425 Td (Conexão segura, redirecionamentos e cabeçalhos de proteção do navegador.) Tj ET
+0.15 0.39 0.92 rg 52 410 3 3 re f
+0.2 0.2 0.23 rg BT /F1 10 Tf 64 407 Td (Consentimento de cookies e transparência sobre rastreadores.) Tj ET
+0.15 0.39 0.92 rg 52 392 3 3 re f
+0.2 0.2 0.23 rg BT /F1 10 Tf 64 389 Td (Política de privacidade, prazos de retenção e canal do encarregado \(DPO\).) Tj ET
+0.15 0.39 0.92 rg 52 374 3 3 re f
+0.2 0.2 0.23 rg BT /F1 10 Tf 64 371 Td (Contratos com fornecedores e compartilhamento de dados com terceiros.) Tj ET
+0.09 0.09 0.11 rg BT /F2 13 Tf 52 345 Td (Recomendações de adequação) Tj ET
+0.2 0.2 0.23 rg BT /F1 10 Tf 64 325 Td (Priorizar os riscos altos: corrigir exposição de dados e obrigações de transparência.) Tj ET
+0.2 0.2 0.23 rg BT /F1 10 Tf 64 307 Td (Definir prazos de retenção por categoria de dado e documentar o critério de eliminação.) Tj ET
+0.2 0.2 0.23 rg BT /F1 10 Tf 64 289 Td (Publicar o contato do encarregado e criar um processo para solicitações de titulares.) Tj ET
+0.2 0.2 0.23 rg BT /F1 10 Tf 64 271 Td (Revisar contratos de fornecedores e incluir cláusulas de tratamento de dados.) Tj ET
+0.2 0.2 0.23 rg BT /F1 10 Tf 64 253 Td (Reavaliar os controles periodicamente e registrar as evidências de cada correção.) Tj ET
+0.85 0.85 0.87 RG 0.8 w 52 231 m 543 231 l S
+0.32 0.32 0.36 rg BT /F1 9 Tf 52 215 Td (Próximo passo: use este relatório como ponto de partida para uma revisão interna e para a) Tj ET
+0.32 0.32 0.36 rg BT /F1 9 Tf 52 202 Td (priorização das correções. Em um cenário real, a ATUE conectaria a análise ao ambiente da empresa.) Tj ET
+0.85 0.85 0.87 RG 0.8 w 52 78 m 543 78 l S
+0.45 0.45 0.48 rg BT /F1 8 Tf 52 64 Td (ATUE - Demonstração - Documento fictício) Tj ET
+0.45 0.45 0.48 rg BT /F1 8 Tf 495 64 Td (Página 1 de 1) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000251 00000 n 
+0000003951 00000 n 
+0000004048 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+4150
+%%EOF

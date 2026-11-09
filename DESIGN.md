@@ -416,6 +416,9 @@ O gráfico de rosca deve possuir:
 
 Não adicionar bibliotecas de gráficos sem necessidade justificada.
 
+Nesta demonstração, o gráfico de rosca é implementado em SVG nativo, sem biblioteca adicional. Os
+ícones também são SVGs inline, porque o Lucide React não está instalado no projeto.
+
 ## 9. Acessibilidade
 
 Obrigatório:
