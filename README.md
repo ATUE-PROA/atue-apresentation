@@ -1,75 +1,62 @@
-# React + TypeScript + Vite
+# ATUE — Demonstração (atue-apresentation)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Demonstração estática da ATUE para o Demoday. O objetivo é apresentar, sem backend, o fluxo de
+análise de conformidade: escolha de uma empresa fictícia, varredura simulada com terminal e
+dashboard executivo com score, achados e recomendações.
 
-Currently, two official plugins are available:
+## Fluxo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. **Home:** três cards selecionáveis (e-commerce, clínica e agência B2B).
+2. **Análise:** terminal escuro com logs progressivos e duração aleatória entre 3 e 7 segundos.
+3. **Resultados:** score em rosca, indicadores, achados por nível de risco, impacto de negócio e
+   recomendações de adequação.
+4. **Download:** CTA que baixa o PDF estático `public/atue-compliance-report.pdf`.
 
-## React Compiler
+## Stack e restrições
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19, TypeScript, Vite e Tailwind CSS v4.
+- Sem backend, banco de dados ou requisições externas.
+- Todos os dados ficam em `src/mocks/companies.ts`.
+- Nenhum site real é acessado e nenhuma IA real é executada.
+- Os resultados são fictícios e não representam auditoria ou garantia de conformidade.
 
-## Expanding the ESLint configuration
+## Estrutura
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```text
+src/
+  components/
+    analysis/    tela de análise e terminal
+    companies/   seleção e cards das empresas
+    layout/      shell com cabeçalho e rodapé
+    results/     score, indicadores, achados, recomendações e CTA
+    ui/          botão, badge e ícones inline
+  lib/           utilitários de score, risco e classes
+  mocks/         empresas, achados e logs
+  types/         contratos tipados
+public/
+  atue-compliance-report.pdf
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+## Scripts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev      # servidor local
+npm run lint     # ESLint
+npx tsc -b       # verificação de tipos
+npm run build    # build de produção (usado no deploy)
 ```
+
+## Download do relatório
+
+O CTA aponta para `/atue-compliance-report.pdf`. O arquivo é estático, contém aviso de demonstração
+e não é gerado dinamicamente.
+
+## Limitações
+
+- A análise, o score e os achados são simulados e vivem apenas nos mocks.
+- Não há persistência: recarregar a página volta à seleção de empresas.
+- O fluxo completo foi validado em Chromium headless (375 px e 1280 px), sem erros de console nem
+  rolagem horizontal.
+- O teste com leitor de tela permanece pendente.
+- O deploy na Vercel depende de acesso ao projeto de hospedagem.
