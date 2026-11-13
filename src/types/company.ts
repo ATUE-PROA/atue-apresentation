@@ -1,13 +1,6 @@
-export type CompanyId = 'ecommerce' | 'clinica' | 'agencia'
+export type CompanyId = 'demo' | 'ecommerce' | 'clinica' | 'agencia'
 
 export type RiskLevel = 'alto' | 'medio' | 'baixo'
-
-export type LogLevel = 'success' | 'warning' | 'info'
-
-export interface AnalysisLog {
-  level: LogLevel
-  message: string
-}
 
 export interface Finding {
   id: string
@@ -25,8 +18,8 @@ export interface CompanyProfile {
   segment: string
   description: string
   website: string
+  lastAnalysisAt: string
   score: number
   summary: string
   findings: Finding[]
-  analysisLogs: AnalysisLog[]
 }

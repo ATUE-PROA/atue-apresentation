@@ -1,54 +1,128 @@
 import { useEffect, useState } from 'react'
 
-import { AnalysisScreen } from './components/analysis/analysis-screen'
-import { CompanySelection } from './components/companies/company-selection'
+import { DashboardScreen } from './components/dashboard/dashboard-screen'
+import { DocumentsScreen } from './components/documents/documents-screen'
+import { AppFooter } from './components/layout/app-footer'
+import { AppHeader } from './components/layout/app-header'
 import { AppShell } from './components/layout/app-shell'
-import { ResultsDashboard } from './components/results/results-dashboard'
+import { LoadingScreen } from './components/loading/loading-screen'
+import { SelectionScreen } from './components/selection/selection-screen'
+import { createSimulatedAnalysis } from './lib/simulation'
 import { COMPANIES, getCompanyById } from './mocks/companies'
-import type { CompanyId, CompanyProfile } from './types/company'
+import type { CompanyId, Finding } from './types/company'
+import type { AppScreen } from './types/ui'
 
-type Stage = 'selection' | 'analysis' | 'results'
+type Stage = 'selection' | 'loading' | 'app'
+
+const DEFAULT_COMPANY = COMPANIES[0]
+
+interface Report {
+  url: string
+  lastAnalysisAt: string
+  score: number
+  findings: readonly Finding[]
+}
+
+const DEFAULT_REPORT: Report = {
+  url: DEFAULT_COMPANY.website,
+  lastAnalysisAt: DEFAULT_COMPANY.lastAnalysisAt,
+  score: DEFAULT_COMPANY.score,
+  findings: DEFAULT_COMPANY.findings,
+}
 
 export default function App() {
   const [stage, setStage] = useState<Stage>('selection')
-  const [selectedId, setSelectedId] = useState<CompanyId | null>(null)
-  const selectedCompany = selectedId ? getCompanyById(selectedId) : undefined
+  const [screen, setScreen] = useState<AppScreen>('dashboard')
+  const [companyId, setCompanyId] = useState<CompanyId>(DEFAULT_COMPANY.id)
+  const [report, setReport] = useState<Report>(DEFAULT_REPORT)
+
+  const company = getCompanyById(companyId) ?? DEFAULT_COMPANY
+  const isApp = stage === 'app'
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' })
-  }, [stage])
+  }, [stage, screen, companyId])
 
-  const handleSelect = (company: CompanyProfile) => {
-    setSelectedId(company.id)
-    setStage('analysis')
+  useEffect(() => {
+    const page = screen === 'documents' ? 'Central de Documentos' : 'Visão geral'
+    document.title = `ATUE — ${page}`
+  }, [screen])
+
+  const handleSelect = (id: CompanyId) => {
+    const selected = getCompanyById(id) ?? DEFAULT_COMPANY
+
+    setCompanyId(id)
+    setReport({
+      url: selected.website,
+      lastAnalysisAt: selected.lastAnalysisAt,
+      score: selected.score,
+      findings: selected.findings,
+    })
+    setScreen('dashboard')
+    setStage('loading')
   }
 
-  const handleAnalysisComplete = () => {
-    setStage('results')
+  const handleUrlUpdated = (url: string) => {
+    const analysis = createSimulatedAnalysis(url)
+
+    setReport({
+      url,
+      lastAnalysisAt: new Date().toISOString(),
+      score: analysis.score,
+      findings: analysis.findings,
+    })
   }
 
-  const handleRestart = () => {
-    setSelectedId(null)
-    setStage('selection')
+  const handleDocumentAnalyzed = (seed: string) => {
+    const analysis = createSimulatedAnalysis(`${company.id}:${seed}`)
+
+    setReport((current) => ({
+      ...current,
+      score: analysis.score,
+      findings: analysis.findings,
+    }))
   }
 
   return (
     <AppShell>
-      {stage === 'selection' ? (
-        <CompanySelection companies={COMPANIES} onSelect={handleSelect} />
-      ) : null}
+      <AppHeader
+        screen={screen}
+        showNavigation={isApp}
+        onNavigate={setScreen}
+        onBack={isApp ? () => setStage('selection') : undefined}
+      />
 
-      {stage === 'analysis' && selectedCompany ? (
-        <AnalysisScreen
-          key={selectedCompany.id}
-          company={selectedCompany}
-          onComplete={handleAnalysisComplete}
-        />
-      ) : null}
+      <main id="conteudo" className="flex flex-1 flex-col">
+        {stage === 'selection' ? (
+          <SelectionScreen companies={COMPANIES} onSelect={handleSelect} />
+        ) : null}
 
-      {stage === 'results' && selectedCompany ? (
-        <ResultsDashboard company={selectedCompany} onRestart={handleRestart} />
-      ) : null}
+        {stage === 'loading' ? (
+          <LoadingScreen company={company} onComplete={() => setStage('app')} />
+        ) : null}
+
+        {isApp ? (
+          screen === 'dashboard' ? (
+            <DashboardScreen
+              findings={report.findings}
+              score={report.score}
+              siteUrl={report.url}
+              lastAnalysisAt={report.lastAnalysisAt}
+              onUrlUpdated={handleUrlUpdated}
+              onOpenDocuments={() => setScreen('documents')}
+            />
+          ) : (
+            <DocumentsScreen onAnalyzed={handleDocumentAnalyzed} />
+          )
+        ) : null}
+      </main>
+
+      <AppFooter
+        screen={screen}
+        showNavigation={isApp}
+        onNavigate={setScreen}
+        onBack={isApp ? () => setStage('selection') : undefined}
+      />
     </AppShell>
   )
 }
