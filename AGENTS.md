@@ -1,160 +1,217 @@
-# AGENTS.md — atue-demo
+# AGENTS.md — atue-apresentation
 
 ## 1. Objetivo
 
-Desenvolver uma demonstração estática da ATUE para o Demoday. O foco é apresentar uma experiência visual convincente, simulando o fluxo de análise de conformidade e geração de documentos.
+`atue-apresentation` é uma demonstração mobile com **duas telas do produto ATUE**:
 
-**O projeto não possui backend, banco de dados ou processamento real de IA.** Toda a experiência deve funcionar localmente com dados simulados.
+1. **Painel / Visão geral** — cópia fiel do dashboard do `atue-web`.
+2. **Central de Documentos** — cópia fiel da tela de documentos do `atue-web`.
 
-## 2. Stack
+Além delas existem apenas:
 
-- React 19
-- Tailwind CSS v4
-- Vite
-- SPA estática
-- Deploy: Vercel
+- uma tela de **seleção de empresa**, para escolher o cenário mockado;
+- uma tela de **carregamento**, que simula a preparação do dashboard.
 
-Utilize TypeScript caso já esteja configurado no projeto. Preserve as dependências e convenções existentes.
+Não há login, cadastro, backend, banco, IA real, análise intermediária ou navegação completa do produto.
 
-## 3. Regras obrigatórias
+## 2. Leitura obrigatória
 
-1. **Zero backend:** não implemente servidores, APIs ou bancos de dados.
-2. **Zero requisições externas:** não conecte com `atue-core-api`, `atue-crawler-service` ou `atue-ai-service`.
-3. **Mocks centralizados:** scores, empresas, achados, logs e respostas simuladas devem ficar em `src/mocks/`.
-4. **Sem dados inventados em tempo real:** resultados devem ser previamente definidos nos mocks.
-5. **PDF estático:** o download deve utilizar `/atue-compliance-report.pdf`, armazenado em `public/`.
-6. **Sem funcionalidades desnecessárias:** não implemente autenticação, cadastro, formulários adicionais ou funcionalidades fora do escopo da demonstração.
-7. **Experiência responsiva:** todas as telas devem funcionar em desktop e dispositivos móveis.
-8. **Código organizado:** evite componentes excessivamente grandes, duplicação e lógica de negócio dentro da apresentação.
+1. Leia este arquivo.
+2. Leia `DESIGN.md` antes de qualquer trabalho visual.
+3. Compare as duas telas com `atue-web/src/pages/Dashboard.tsx` e `atue-web/src/pages/Documents.tsx`.
+4. Inspecione `package.json`, `src/` e `TASKS.md`.
 
-## 4. Fluxo da aplicação
+`DESIGN.md` é a identidade compartilhada. Este `AGENTS.md` prevalece em decisões técnicas e funcionais.
 
-### 4.1. Home — Seleção de empresa
+## 3. Fluxo
 
-Apresentar três cards selecionáveis:
+```text
+Seleção de empresa
+  → Carregamento mockado (1,6s)
+    → Painel (Visão geral) ⇄ Central de Documentos
+```
 
-- **Empresa A:** E-commerce.
-- **Empresa B:** Clínica.
-- **Empresa C:** Agência de marketing.
+- A seleção não mostra scores.
+- “Trocar empresa” no header/footer volta à seleção.
+- O header alterna entre Painel e Documentos.
+- Perfil, Configurações, Planos, Enviar documentos, Contato, Privacidade e Termos não existem nesta demo; aparecem desabilitados.
+- O PDF demonstrativo fica na aba “Central de downloads”.
 
-Cada empresa deve possuir dados, resultados e identidade visual próprios.
+## 4. Mobile-first
 
-Não solicitar URL ou qualquer informação do usuário.
+- Desenhe primeiro para 320–430px.
+- Valide 320, 360, 375, 390, 768, 1024 e 1440px.
+- Sem rolagem horizontal.
+- Alvos de toque com pelo menos 44px.
+- As duas telas copiam a estrutura do web, inclusive cards, header e footer; em mobile, o header reduz labels e oculta itens não essenciais.
+- Não criar um terceiro fluxo de produto.
 
-### 4.2. Análise — Loading simulado
+## 5. Stack
 
-Ao selecionar uma empresa:
+- React 19 + TypeScript + Vite 8.
+- Tailwind CSS v4, tokens em `src/index.css`.
+- SPA sem router; estado em `src/App.tsx`.
+- Sem Lucide/Recharts/Radix: ícones SVG inline, score em SVG nativo e accordion local.
+- Fontes locais Geist e Fraunces.
+- Logo oficial em `public/brand/`.
+- Sem test runner.
+- Tema claro.
 
-- Exibir uma tela de análise por um período aleatório entre 3 e 7 segundos.
-- Apresentar um terminal escuro com logs técnicos animados.
-- Atualizar o progresso visual conforme os logs são exibidos.
-- Evitar que os logs apareçam todos de uma vez.
+Scripts:
 
-Exemplos de logs:
+```bash
+npm run dev
+npm run lint
+npx tsc -b
+npm run preview
+```
 
-- `[+] Resolvendo DNS...`
-- `[+] Mapeando cabeçalhos de segurança...`
-- `[!] Cookies de terceiros detectados.`
-- `[+] Identificando formulários...`
-- `[+] Consultando motor de conformidade...`
-- `[+] Consolidando relatório executivo...`
+Não execute `npm run build` como rotina de validação.
 
-Toda a execução é simulada. Não realizar varreduras ou requisições reais.
+## 6. Estrutura
 
-### 4.3. Dashboard — Resultados
+```text
+public/
+  brand/atue-logo-light.svg
+  brand/atue-logo-dark.svg
+  atue-compliance-report.pdf
+src/
+  App.tsx                         seleção → carregamento → app
+  index.css
+  content/
+    diagnostics.ts                copy do dashboard
+    documents.ts                  copy da Central de Documentos
+  components/
+    selection/                    escolha de empresa
+    loading/                       carregamento mockado
+    layout/                        shell, header e footer
+    dashboard/                     visão geral, score, prioridades, achados e formulário
+    documents/                     anexo, exemplos, análise simulada e downloads
+    ui/                            badge, botão, card, alerta, tipografia e ícones
+  lib/                            score, severidade, data e classes
+  mocks/companies.ts              quatro cenários
+  types/                          contratos
+```
 
-Após a análise, apresentar:
+## 7. Mocks
 
-- Score de risco em gráfico de rosca.
-- Indicadores resumidos da empresa.
-- Lista de achados técnicos.
-- Classificação por nível de risco.
-- Explicações dos achados em linguagem de negócios.
-- Recomendações de adequação.
+| Empresa | Segmento | Score |
+| --- | --- | --- |
+| Demonstração ATUE | Ambiente de demonstração | 72 |
+| Loja Verde Naturals | E-commerce | 24 |
+| Clínica Bem Estar | Clínica médica | 41 |
+| Agência Órbita | Agência B2B | 68 |
 
-Os resultados devem variar conforme a empresa selecionada e ser carregados exclusivamente dos mocks.
+- Cada empresa tem resumo, site, data de análise e achados próprios.
+- O carregamento usa a empresa escolhida.
+- O formulário do dashboard atualiza URL e data na simulação.
 
-### 4.4. Conversão — Download
+## 8. Tela 1 — Painel
 
-Adicionar uma CTA destacada ao final dos resultados.
+Deve reproduzir o dashboard do web:
 
-Exemplos:
+1. Badge “Demonstração”, H1 “Visão geral” e descrição.
+2. CTA “Atualizar diagnóstico”.
+3. Situação, site analisado e última análise.
+4. Card “Índice de conformidade” com score, nível, ressalva e dimensões.
+5. Card “Comece por aqui” com as três prioridades.
+6. Card “Todas as pendências” com resumo por severidade e accordion.
+7. Formulário “Atualizar diagnóstico”.
+8. Nota de rodapé.
 
-- Gerar minutas de adequação.
-- Baixar relatório de conformidade.
-- Baixar política de privacidade.
+O formulário simula o envio e atualiza a URL/data exibidas. Não acessa nenhum site.
 
-O botão deve iniciar diretamente o download de `public/atue-compliance-report.pdf`.
+## 9. Tela 2 — Central de Documentos
 
-Não abrir outra tela, gerar documentos dinamicamente ou solicitar informações adicionais.
+Deve reproduzir a tela do web:
 
-## 5. Tasks — Execução obrigatória
+- Cabeçalho “Diagnóstico, análise e downloads” + H1 “Central de Documentos”.
+- Abas “Analisar documento” e “Central de downloads”.
+- Anexo local com validação de tipo/tamanho, sem leitura ou upload do conteúdo.
+- Seleção de documento fictício.
+- Botão “Simular análise”, com loading e feedback.
+- Aviso de simulação local.
+- Lista “Documentos de exemplo” interativa.
+- Aba de downloads com o modelo único em PDF.
+- Link “Precisa enviar vários documentos?” apenas informativo.
 
-Antes de implementar, analise o repositório e transforme as atividades abaixo em um checklist executável no arquivo `TASKS.md`.
+Regras:
 
-O checklist deve refletir o estado real do projeto. Adicione tarefas identificadas durante a análise e não marque atividades como concluídas sem validação.
+- Anexar arquivo usa somente nome, tipo e tamanho.
+- Nenhum conteúdo é lido, enviado ou processado.
+- “Simular análise” é local e determinístico.
+- O PDF é único e genérico.
 
-### T01 — Auditoria do projeto
+## 10. Carregamento
 
-- [ ] Inspecionar estrutura de diretórios e componentes existentes.
-- [ ] Verificar dependências e scripts disponíveis.
-- [ ] Identificar funcionalidades já implementadas e pendências.
-- [ ] Definir a estrutura final de componentes e mocks.
+- Mostrado após a seleção, antes do app.
+- Duração de 1,6s.
+- Logo, empresa, etapa atual, percentual e barra de progresso.
+- Texto deixa claro que são dados simulados.
+- Não simular rede real.
+- Deve limpar timers ao desmontar.
 
-### T02 — Dados simulados
+## 11. Convenções
 
-- [ ] Criar os mocks das três empresas.
-- [ ] Definir scores, indicadores e níveis de risco.
-- [ ] Criar achados técnicos e respectivas explicações de negócio.
-- [ ] Criar os logs de análise.
-- [ ] Garantir que cada empresa apresente resultados distintos.
+- Componentes em PascalCase; arquivos em kebab-case.
+- Tipos explícitos; nada de `any`.
+- Copy centralizada em `src/content/`.
+- Dados em `src/mocks/`; lógica em `src/lib/`.
+- Ícones SVG inline, `aria-hidden` quando decorativos.
+- Siga a seção 20 do `DESIGN.md` fora das telas copiadas; nas telas do produto, preserve a fidelidade ao web.
 
-### T03 — Interface
+## 12. Restrições
 
-- [ ] Implementar a seleção de empresas.
-- [ ] Desenvolver a tela de carregamento.
-- [ ] Implementar terminal com logs animados.
-- [ ] Desenvolver o dashboard de resultados.
-- [ ] Implementar o gráfico de risco.
-- [ ] Implementar a seção de recomendações.
+1. Zero backend, APIs, banco, autenticação ou cadastro.
+2. Zero requisições externas.
+3. Mocks determinísticos.
+4. PDF estático e genérico.
+5. Sem gerador de PDF.
+6. Sem login, planos, perfil, configurações ou envio completo.
+7. Sem novas dependências sem justificativa.
+8. Sem router.
+9. Sem tema escuro toggle.
+10. Acessibilidade: HTML semântico, um `h1` por tela, foco visível, labels, abas acessíveis, `aria-expanded`, `prefers-reduced-motion`.
+11. Honestidade: dados fictícios, sem auditoria real.
+12. Preservar os quatro cenários, as duas telas, o carregamento e o PDF.
 
-### T04 — Download
+## 13. Validação
 
-- [ ] Verificar a existência do PDF em `public/`.
-- [ ] Implementar o download direto.
-- [ ] Garantir que o arquivo seja acessível pelo caminho definido.
+```bash
+npm run lint
+npx tsc -b
+```
 
-### T05 — Qualidade
+Manual:
 
-- [ ] Verificar navegação entre as telas.
-- [ ] Validar o comportamento das três empresas.
-- [ ] Corrigir problemas de responsividade.
-- [ ] Verificar acessibilidade e estados de interação.
-- [ ] Identificar e corrigir erros de execução.
-- [ ] Verificar os scripts de lint, testes e tipagem disponíveis.
+- Escolher cada empresa e ver o carregamento e o dashboard correspondente.
+- Alternar Painel ⇄ Documentos.
+- Testar “Trocar empresa”.
+- Testar accordion, filtros e formulário do dashboard.
+- Testar anexo inválido, exemplo, simulação e feedback na Central.
+- Testar a aba de downloads e o PDF.
+- Testar 320, 360, 375, 390, 768, 1024 e 1440px.
+- Testar teclado, foco e reduced motion.
+- Console sem erros e sem requisições externas.
 
-## 6. Processo de trabalho do agente
+## 14. Preservação
 
-1. Leia este arquivo antes de qualquer alteração.
-2. Analise o código existente antes de criar ou modificar arquivos.
-3. Crie ou atualize `TASKS.md` com tarefas, prioridades e critérios de conclusão.
-4. Implemente as tarefas; não se limite a apresentar um plano.
-5. Atualize o checklist conforme cada tarefa for concluída e validada.
-6. Preserve funcionalidades existentes que estejam dentro do escopo.
-7. Não instale dependências sem necessidade justificada.
-8. Não execute `npm build` ou `npm run build`. Consulte os scripts disponíveis e utilize as verificações apropriadas.
-9. Ao finalizar, informe o que foi implementado, quais arquivos foram alterados, quais verificações foram executadas e o que permaneceu pendente.
+- As duas telas e o fluxo seleção → carregamento → app.
+- A fidelidade visual ao dashboard e à Central de Documentos do web.
+- O header com Painel/Documentos e o footer.
+- A seleção sem scores antecipados.
+- O PDF como modelo único.
+- Os avisos de demonstração.
+- A experiência mobile-first.
 
-## 7. Critérios de conclusão
+## 15. Critérios de conclusão
 
-O trabalho só será considerado concluído quando:
-
-- As três empresas puderem ser selecionadas.
-- Cada seleção executar uma análise simulada independente.
-- O dashboard apresentar os dados correspondentes à empresa escolhida.
-- O gráfico e os indicadores exibirem os valores dos mocks.
-- O download do PDF funcionar.
-- A aplicação funcionar sem backend ou requisições externas.
-- As tarefas concluídas estiverem validadas no `TASKS.md`.
-
-**Prioridade máxima:** fidelidade visual, fluidez da demonstração e estabilidade. Não adicionar complexidade técnica que não contribua diretamente para esses objetivos.
+- A seleção abre com a demonstração padrão e os três cenários de empresa.
+- O carregamento aparece e conclui.
+- O dashboard e a Central abrem com dados mockados.
+- A navegação entre as duas telas funciona.
+- Accordion, formulário, anexo e simulação funcionam.
+- O PDF é acessível como modelo genérico.
+- Sem login, backend ou requisições.
+- Mobile-first sem overflow.
+- `npm run lint` e `npx tsc -b` passam.

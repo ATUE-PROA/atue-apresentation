@@ -1,66 +1,74 @@
 # TASKS — atue-apresentation
 
-Checklist executável da demonstração estática da ATUE para o Demoday.
+Checklist da demonstração mobile com duas telas do produto.
 
-## T01 — Auditoria do projeto
+## T01 — Fundação
 
-- [x] Inspecionar estrutura de diretórios e componentes existentes.
-- [x] Verificar dependências e scripts disponíveis.
-- [x] Identificar funcionalidades já implementadas e pendências.
-- [x] Definir a estrutura final de componentes e mocks.
+- [x] Identidade compartilhada em `DESIGN.md`.
+- [x] Tokens claros e fontes locais.
+- [x] Logos oficiais em `public/brand/`.
+- [x] Header/footer no padrão do produto.
 
-## T02 — Dados simulados
+## T02 — Seleção e carregamento
 
-- [x] Criar os mocks das três empresas.
-- [x] Definir scores, indicadores e níveis de risco.
-- [x] Criar achados técnicos e respectivas explicações de negócio.
-- [x] Criar os logs de análise.
-- [x] Garantir que cada empresa apresente resultados distintos.
+- [x] Tela com a demonstração padrão e as três empresas fictícias.
+- [x] Nome e segmento apenas, sem scores.
+- [x] Carregamento mockado de 1,6s com progresso.
+- [x] Entrada no Painel após o carregamento.
 
-## T03 — Interface
+## T03 — Painel
 
-- [x] Implementar a seleção de empresas.
-- [x] Desenvolver a tela de carregamento.
-- [x] Implementar terminal com logs animados.
-- [x] Desenvolver o dashboard de resultados.
-- [x] Implementar o gráfico de risco.
-- [x] Implementar a seção de recomendações.
+- [x] Cópia do dashboard do web.
+- [x] Score, nível, ressalva e dimensões.
+- [x] Prioridades e pendências por severidade.
+- [x] Accordion de pendências.
+- [x] Formulário de atualização simulado.
 
-## T04 — Download
+## T04 — Central de Documentos
 
-- [x] Verificar a existência do PDF em `public/`.
-- [x] Implementar o download direto.
-- [x] Garantir que o arquivo seja acessível pelo caminho definido.
+- [x] Abas Analisar documento e Central de downloads.
+- [x] Anexo local com validação de tipo/tamanho.
+- [x] Documentos de exemplo interativos.
+- [x] Simulação de análise com loading e feedback.
+- [x] Download do modelo PDF.
 
-## T05 — Qualidade
+## T05 — Navegação
 
-- [x] Verificar navegação entre as telas.
-- [x] Validar o comportamento das três empresas.
-- [x] Corrigir problemas de responsividade.
-- [ ] Verificar acessibilidade e estados de interação.
-- [x] Identificar e corrigir erros de execução.
-- [x] Verificar os scripts de lint, testes e tipagem disponíveis.
+- [x] Painel ⇄ Documentos no header.
+- [x] “Trocar empresa” no footer.
+- [x] Itens não implementados desabilitados.
+
+## T06 — Qualidade
+
+- [x] `npm run lint`.
+- [x] `npx tsc -b`.
+- [x] Screenshots em 390 e 1280 px.
+- [x] Sem `fetch`/XHR.
+- [ ] Clique ponta a ponta em dispositivo físico.
+- [ ] Leitor de tela.
+- [ ] Safe area de iPhone.
 
 ## Critérios de conclusão
 
-- [x] As três empresas podem ser selecionadas.
-- [x] Cada seleção executa uma análise simulada independente.
-- [x] O dashboard apresenta os dados correspondentes à empresa escolhida.
-- [x] O gráfico e os indicadores exibem os valores dos mocks.
-- [x] O download do PDF funciona pelo caminho definido.
-- [x] A aplicação funciona sem backend ou requisições externas.
-- [x] As tarefas concluídas foram validadas com `npm run lint` e `npx tsc -b`.
+- [x] Seleção com quatro cenários.
+- [x] Carregamento funcional.
+- [x] Painel e Central de Documentos.
+- [x] Navegação entre as duas telas.
+- [x] PDF acessível.
+- [x] Sem login, backend ou requisições externas.
+- [x] `npm run lint` e `npx tsc -b` passam.
 
 ## Validação executada
 
 - `npm run lint` — passou.
 - `npx tsc -b` — passou.
-- Fluxo completo em Chromium headless: seleção → análise → resultados, sem erros de console.
-- Sem rolagem horizontal em 375 px (mobile) e 1280 px (desktop).
-- PDF servido em `/atue-compliance-report.pdf` com `Content-Type: application/pdf`.
-- Nenhuma chamada `fetch`/`XMLHttpRequest` no código.
+- Vite dev server — HTTP 200.
+- PDF — HTTP 200, `application/pdf`.
+- Screenshots — Firefox headless.
+- Nenhum `npm run build` foi executado.
 
 ## Pendências
 
-- Teste com leitor de tela e revisão manual de foco em todos os controles.
-- Deploy na Vercel (depende de acesso ao projeto de hospedagem).
+- Clique real ponta a ponta e leitor de tela.
+- Safe area de iOS em hardware.
+- Tema escuro fora do escopo.

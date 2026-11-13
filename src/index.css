@@ -1,40 +1,145 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:is(.dark *));
+
+@font-face {
+  font-family: 'Geist Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('./assets/fonts/geist-latin-wght-normal.woff2') format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Fraunces Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('./assets/fonts/fraunces-latin-wght-normal.woff2') format('woff2-variations');
+}
+
 :root {
+  color-scheme: light;
+
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --muted: rgb(202 202 202 / 0.18);
+  --muted-foreground: rgb(10 10 10 / 0.72);
+  --border: #cacaca;
+  --input: #777777;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --ring: #2563eb;
+  --destructive: #dc2626;
+
+  --surface: #0a0a0a;
+  --surface-foreground: #ffffff;
+  --surface-muted: #a0a0a0;
+  --surface-border: rgb(255 255 255 / 0.12);
+}
+
+/* Tema escuro por escolha do usuário (persistida em localStorage). */
+.dark {
   color-scheme: dark;
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
+
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --card: #161616;
+  --muted: #161616;
+  --muted-foreground: rgb(255 255 255 / 0.66);
+  --border: rgb(202 202 202 / 0.24);
+  --input: rgb(255 255 255 / 0.42);
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --ring: #2563eb;
+  --destructive: #f87171;
+
+  --surface: #0a0a0a;
+  --surface-foreground: #ffffff;
+  --surface-muted: #a0a0a0;
+  --surface-border: rgb(255 255 255 / 0.12);
+}
+
+@theme inline {
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-heading: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-border: var(--surface-border);
+}
+
+html {
+  scrollbar-gutter: stable;
+  scrollbar-color: var(--border) var(--background);
+  background-color: var(--background);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-html {
-  scrollbar-gutter: stable;
-  background-color: #09090b;
-}
-
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  background-color: #09090b;
-  color: #fafafa;
-}
-
 #root {
   min-height: 100vh;
 }
 
+h1 {
+  font-family: var(--font-heading);
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
 ::selection {
-  background-color: rgb(37 99 235 / 35%);
-  color: #fafafa;
+  background-color: rgb(37 99 235 / 0.18);
+  color: var(--foreground);
+}
+
+dialog::backdrop {
+  background-color: rgb(10 10 10 / 0.45);
+}
+
+@utility text-section {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+@utility text-display {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
 }

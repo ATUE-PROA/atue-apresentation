@@ -16,7 +16,7 @@ export function getScoreLevel(score: number): ScoreLevel {
       label: 'Crítico',
       description: 'A operação precisa de correções prioritárias antes de avançar.',
       color: '#ef4444',
-      textClass: 'text-red-400',
+      textClass: 'text-red-600 dark:text-red-400',
       dotClass: 'bg-red-500',
     }
   }
@@ -26,7 +26,7 @@ export function getScoreLevel(score: number): ScoreLevel {
       label: 'Atenção',
       description: 'Existem lacunas relevantes que exigem um plano de adequação.',
       color: '#f97316',
-      textClass: 'text-orange-400',
+      textClass: 'text-orange-700 dark:text-orange-400',
       dotClass: 'bg-orange-500',
     }
   }
@@ -36,7 +36,7 @@ export function getScoreLevel(score: number): ScoreLevel {
       label: 'Atenção',
       description: 'A base está organizada, mas ainda há pontos a evoluir.',
       color: '#eab308',
-      textClass: 'text-yellow-400',
+      textClass: 'text-yellow-700 dark:text-yellow-400',
       dotClass: 'bg-yellow-500',
     }
   }
@@ -45,7 +45,7 @@ export function getScoreLevel(score: number): ScoreLevel {
     label: 'Conforme',
     description: 'Os controles avaliados estão em um patamar satisfatório.',
     color: '#22c55e',
-    textClass: 'text-green-400',
+    textClass: 'text-green-700 dark:text-green-400',
     dotClass: 'bg-green-500',
   }
 }
@@ -62,27 +62,35 @@ export const RISK_META: Record<RiskLevel, RiskMeta> = {
   alto: {
     label: 'Risco alto',
     description: 'Corrigir com prioridade. Há exposição direta de dados ou obrigações não atendidas.',
-    textClass: 'text-red-400',
-    badgeClass: 'border-red-500/30 bg-red-500/10 text-red-300',
+    textClass: 'text-red-700 dark:text-red-300',
+    badgeClass: 'border-red-600/30 bg-red-600/10 text-red-700 dark:text-red-300',
     dotClass: 'bg-red-500',
   },
   medio: {
     label: 'Risco médio',
     description: 'Tratar no curto prazo. O controle existe, mas está incompleto ou pouco transparente.',
-    textClass: 'text-yellow-400',
-    badgeClass: 'border-yellow-500/30 bg-yellow-500/10 text-yellow-200',
+    textClass: 'text-yellow-700 dark:text-yellow-200',
+    badgeClass: 'border-yellow-600/30 bg-yellow-600/10 text-yellow-700 dark:text-yellow-200',
     dotClass: 'bg-yellow-500',
   },
   baixo: {
     label: 'Risco baixo',
     description: 'Evoluir de forma planejada. O impacto é limitado, mas a melhoria é recomendada.',
-    textClass: 'text-blue-400',
-    badgeClass: 'border-blue-500/30 bg-blue-500/10 text-blue-300',
+    textClass: 'text-blue-700 dark:text-blue-200',
+    badgeClass: 'border-blue-600/30 bg-blue-600/10 text-blue-700 dark:text-blue-200',
     dotClass: 'bg-blue-500',
   },
 }
 
-export const RISK_ORDER: readonly RiskLevel[] = ['alto', 'medio', 'baixo']
+const RISK_WEIGHT: Record<RiskLevel, number> = {
+  alto: 0,
+  medio: 1,
+  baixo: 2,
+}
+
+export function sortFindingsByRisk(findings: readonly Finding[]): Finding[] {
+  return [...findings].sort((first, second) => RISK_WEIGHT[first.risk] - RISK_WEIGHT[second.risk])
+}
 
 export interface FindingSummary {
   total: number
@@ -108,32 +116,4 @@ export function summarizeFindings(findings: readonly Finding[]): FindingSummary 
     },
     { total: 0, high: 0, medium: 0, low: 0 },
   )
-}
-
-export interface RiskGroup {
-  risk: RiskLevel
-  findings: Finding[]
-}
-
-export function groupFindingsByRisk(findings: readonly Finding[]): RiskGroup[] {
-  return RISK_ORDER.map((risk) => ({
-    risk,
-    findings: findings.filter((finding) => finding.risk === risk),
-  })).filter((group) => group.findings.length > 0)
-}
-
-export function collectRecommendations(findings: readonly Finding[]): string[] {
-  const seen = new Set<string>()
-  const recommendations: string[] = []
-
-  for (const finding of findings) {
-    if (seen.has(finding.recommendation)) {
-      continue
-    }
-
-    seen.add(finding.recommendation)
-    recommendations.push(finding.recommendation)
-  }
-
-  return recommendations
 }

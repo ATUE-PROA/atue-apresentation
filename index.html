@@ -4,11 +4,27 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFFFFF" />
+    <!-- Tema claro é o padrão; o escuro segue o navegador até uma escolha explícita. -->
+    <script>
+      ;(function () {
+        var stored = null
+        try {
+          stored = localStorage.getItem('atue-theme')
+        } catch (error) {
+          stored = null
+        }
+        var isDark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
+        document.documentElement.classList.toggle('dark', isDark)
+        var meta = document.querySelector('meta[name="theme-color"]')
+        if (meta) meta.setAttribute('content', isDark ? '#0A0A0A' : '#FFFFFF')
+      })()
+    </script>
     <meta
       name="description"
-      content="Demonstração estática da ATUE: simulação de análise de conformidade para três empresas fictícias."
+      content="Painel de conformidade da ATUE: índice, pendências priorizadas e central de documentos."
     />
-    <title>ATUE — Demonstração de conformidade</title>
+    <title>ATUE — Conformidade e privacidade</title>
   </head>
   <body>
     <div id="root"></div>

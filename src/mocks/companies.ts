@@ -1,4 +1,4 @@
-import type { AnalysisLog, CompanyId, CompanyProfile, Finding } from '../types/company'
+import type { CompanyId, CompanyProfile, Finding } from '../types/company'
 
 const ECOMMERCE_FINDINGS: Finding[] = [
   {
@@ -133,45 +133,55 @@ const AGENCY_FINDINGS: Finding[] = [
   },
 ]
 
-const COMMON_LOGS: AnalysisLog[] = [
-  { level: 'success', message: 'Resolvendo DNS e verificando disponibilidade...' },
-  { level: 'success', message: 'Mapeando cabeçalhos de segurança...' },
-  { level: 'info', message: 'Identificando formulários e pontos de coleta...' },
-  { level: 'info', message: 'Consultando motor de conformidade (simulado)...' },
-  { level: 'success', message: 'Consolidando relatório executivo...' },
-]
-
-const ECOMMERCE_LOGS: AnalysisLog[] = [
-  COMMON_LOGS[0],
-  { level: 'warning', message: 'Conexão HTTP sem redirecionamento para HTTPS.' },
-  { level: 'warning', message: 'Content-Security-Policy ausente nos cabeçalhos.' },
-  COMMON_LOGS[2],
-  { level: 'warning', message: 'Cookies de marketing gravados antes do consentimento.' },
-  COMMON_LOGS[3],
-  COMMON_LOGS[4],
-]
-
-const CLINIC_LOGS: AnalysisLog[] = [
-  COMMON_LOGS[0],
-  COMMON_LOGS[1],
-  { level: 'warning', message: 'Formulário de agendamento coleta dados sensíveis sem aviso de finalidade.' },
-  { level: 'warning', message: 'Encarregado (DPO) não indicado publicamente.' },
-  { level: 'warning', message: 'Retenção de prontuários sem prazo declarado.' },
-  COMMON_LOGS[3],
-  COMMON_LOGS[4],
-]
-
-const AGENCY_LOGS: AnalysisLog[] = [
-  COMMON_LOGS[0],
-  COMMON_LOGS[1],
-  { level: 'info', message: 'Banner de cookies encontrado, mas sem detalhamento por categoria.' },
-  { level: 'warning', message: 'Prazos de retenção genéricos na política.' },
-  { level: 'warning', message: 'Contratos de fornecedores sem cláusula de tratamento de dados.' },
-  COMMON_LOGS[3],
-  COMMON_LOGS[4],
+const DEMO_FINDINGS: Finding[] = [
+  {
+    id: 'demo-privacy-policy',
+    name: 'Política de Privacidade',
+    category: 'Transparência',
+    risk: 'alto',
+    technicalDescription: 'Documento não encontrado no site institucional.',
+    businessImpact:
+      'Sem uma política acessível, o titular não consegue entender quais dados são coletados, com qual finalidade e por quanto tempo são mantidos.',
+    recommendation:
+      'Publique uma Política de Privacidade em local visível e inclua finalidades, bases legais, compartilhamentos, retenção e canal do DPO.',
+  },
+  {
+    id: 'demo-cookie-banner',
+    name: 'Banner de cookies',
+    category: 'Cookies e rastreamento',
+    risk: 'medio',
+    technicalDescription: 'O site não apresenta escolha de cookies antes do carregamento.',
+    businessImpact:
+      'Cookies de análise e marketing podem ser gravados sem que o visitante tenha uma opção clara de aceitar ou recusar.',
+    recommendation:
+      'Implemente um banner com opções granulares, registre a escolha e impeça o carregamento de cookies não essenciais antes do consentimento.',
+  },
+  {
+    id: 'demo-retention',
+    name: 'Prazo de retenção',
+    category: 'Retenção de dados',
+    risk: 'baixo',
+    technicalDescription: 'A política atual não informa prazos de retenção.',
+    businessImpact:
+      'A ausência de prazos dificulta a eliminação oportuna e a comprovação de que os dados não são mantidos além do necessário.',
+    recommendation:
+      'Defina prazos por categoria de dado e documente o critério usado para eliminar ou anonimizar registros ao final do período.',
+  },
 ]
 
 export const COMPANIES: readonly CompanyProfile[] = [
+  {
+    id: 'demo',
+    name: 'Empresa Modelo',
+    segment: 'Serviços digitais',
+    description: 'Cenário inicial com três pendências avaliadas e score 72.',
+    website: 'https://empresa-modelo.com.br',
+    lastAnalysisAt: '2026-10-28T14:20:00.000Z',
+    score: 72,
+    summary:
+      'Cenário inicial com três pendências avaliadas. O resultado organiza os achados por severidade e propõe um plano de adequação priorizado.',
+    findings: DEMO_FINDINGS,
+  },
   {
     id: 'ecommerce',
     name: 'Loja Verde Naturals',
@@ -179,11 +189,11 @@ export const COMPANIES: readonly CompanyProfile[] = [
     description:
       'Loja de produtos naturais com checkout próprio, rastreadores de marketing e política desatualizada.',
     website: 'https://lojaverdenaturals.com.br',
+    lastAnalysisAt: '2026-11-09T14:32:00.000Z',
     score: 24,
     summary:
       'Operação de e-commerce com checkout próprio e rastreadores de marketing. A ausência de HTTPS e de política de conteúdo amplia o risco sobre dados de pagamento.',
     findings: ECOMMERCE_FINDINGS,
-    analysisLogs: ECOMMERCE_LOGS,
   },
   {
     id: 'clinica',
@@ -192,11 +202,11 @@ export const COMPANIES: readonly CompanyProfile[] = [
     description:
       'Clínica com agendamento online e prontuário eletrônico, sem encarregado indicado publicamente.',
     website: 'https://clinicabemestar.com.br',
+    lastAnalysisAt: '2026-11-10T10:15:00.000Z',
     score: 41,
     summary:
       'Clínica com agendamento online e prontuário eletrônico. Dados de saúde são tratados sem prazo de retenção declarado e sem encarregado público.',
     findings: CLINIC_FINDINGS,
-    analysisLogs: CLINIC_LOGS,
   },
   {
     id: 'agencia',
@@ -205,11 +215,11 @@ export const COMPANIES: readonly CompanyProfile[] = [
     description:
       'Agência que trata dados de leads de clientes e mantém contratos de fornecedores sem cláusulas específicas.',
     website: 'https://agenciaorbita.com.br',
+    lastAnalysisAt: '2026-11-11T09:20:00.000Z',
     score: 68,
     summary:
       'Agência B2B que trata dados de leads de clientes. A operação tem controles básicos, mas faltam detalhamento de cookies, retenção e cláusulas com fornecedores.',
     findings: AGENCY_FINDINGS,
-    analysisLogs: AGENCY_LOGS,
   },
 ]
 

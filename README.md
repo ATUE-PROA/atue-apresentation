@@ -1,39 +1,51 @@
-# ATUE — Demonstração (atue-apresentation)
+# ATUE — Demonstração mobile
 
-Demonstração estática da ATUE para o Demoday. O objetivo é apresentar, sem backend, o fluxo de
-análise de conformidade: escolha de uma empresa fictícia, varredura simulada com terminal e
-dashboard executivo com score, achados e recomendações.
+Demonstração estática com duas telas do produto ATUE Web, dados mockados e sem login ou backend.
 
 ## Fluxo
 
-1. **Home:** três cards selecionáveis (e-commerce, clínica e agência B2B).
-2. **Análise:** terminal escuro com logs progressivos e duração aleatória entre 3 e 7 segundos.
-3. **Resultados:** score em rosca, indicadores, achados por nível de risco, impacto de negócio e
-   recomendações de adequação.
-4. **Download:** CTA que baixa o PDF estático `public/atue-compliance-report.pdf`.
+1. **Seleção de empresa:** quatro cenários fictícios, sem scores antecipados.
+2. **Carregamento:** tela simulada de 1,6s com logo, empresa, etapa e progresso.
+3. **Painel:** cópia do dashboard do `atue-web`, com score, prioridades, pendências e formulário.
+4. **Central de Documentos:** cópia da tela de documentos, com anexo local, exemplos, análise simulada e downloads.
+
+O header alterna entre Painel e Documentos. Perfil, Configurações, Planos e demais áreas aparecem desabilitados porque não fazem parte desta demonstração.
+
+## Mocks
+
+- Demonstração ATUE — ambiente de demonstração — score 72 (padrão).
+- Loja Verde Naturals — E-commerce — score 24.
+- Clínica Bem Estar — Clínica médica — score 41.
+- Agência Órbita — Agência B2B — score 68.
 
 ## Stack e restrições
 
 - React 19, TypeScript, Vite e Tailwind CSS v4.
-- Sem backend, banco de dados ou requisições externas.
-- Todos os dados ficam em `src/mocks/companies.ts`.
-- Nenhum site real é acessado e nenhuma IA real é executada.
-- Os resultados são fictícios e não representam auditoria ou garantia de conformidade.
+- Fontes locais Geist e Fraunces; ícones SVG inline e score em SVG.
+- Sem backend, banco, autenticação ou requisições externas.
+- Sem router: `src/App.tsx` controla seleção, carregamento e telas.
+- Tema claro.
+- O header/footer copiam o produto, mas só Painel e Documentos são funcionais.
 
 ## Estrutura
 
 ```text
 src/
+  App.tsx
+  index.css
+  content/        copy do dashboard e da Central de Documentos
   components/
-    analysis/    tela de análise e terminal
-    companies/   seleção e cards das empresas
-    layout/      shell com cabeçalho e rodapé
-    results/     score, indicadores, achados, recomendações e CTA
-    ui/          botão, badge e ícones inline
-  lib/           utilitários de score, risco e classes
-  mocks/         empresas, achados e logs
-  types/         contratos tipados
+    selection/    escolha de empresa
+    loading/      carregamento mockado
+    layout/       shell, header e footer
+    dashboard/    painel, score, prioridades, pendências e formulário
+    documents/    anexo, exemplos, análise e downloads
+    ui/           badge, botão, card, alerta e ícones
+  lib/            score, severidade, data e classes
+  mocks/          empresas e achados
+  types/          contratos
 public/
+  brand/          logos ATUE
   atue-compliance-report.pdf
 ```
 
@@ -41,22 +53,20 @@ public/
 
 ```bash
 npm install
-npm run dev      # servidor local
-npm run lint     # ESLint
-npx tsc -b       # verificação de tipos
-npm run build    # build de produção (usado no deploy)
+npm run dev
+npm run lint
+npx tsc -b
+npm run build
 ```
 
-## Download do relatório
+## Relatório
 
-O CTA aponta para `/atue-compliance-report.pdf`. O arquivo é estático, contém aviso de demonstração
-e não é gerado dinamicamente.
+O PDF fica na aba **Central de downloads**. É um modelo único e genérico, sem dados da empresa, score ou data.
 
 ## Limitações
 
-- A análise, o score e os achados são simulados e vivem apenas nos mocks.
-- Não há persistência: recarregar a página volta à seleção de empresas.
-- O fluxo completo foi validado em Chromium headless (375 px e 1280 px), sem erros de console nem
-  rolagem horizontal.
-- O teste com leitor de tela permanece pendente.
-- O deploy na Vercel depende de acesso ao projeto de hospedagem.
+- Dados fictícios; não representam auditoria ou garantia de conformidade.
+- O formulário e a análise de documentos são simulações locais.
+- Anexos usam apenas nome, tipo e tamanho; nenhum conteúdo é lido ou enviado.
+- Sem persistência: recarregar volta à seleção.
+- Tema escuro fora do escopo.
