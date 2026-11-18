@@ -1,8 +1,6 @@
 export const DIAGNOSTICS_CONTENT = {
   page: {
     title: 'Visão geral',
-    description:
-      'Aqui você vê o que precisa de atenção, o que já está organizado e qual é o próximo passo. Os resultados vêm da análise do site.',
     statusLabel: 'Situação atual',
     urlLabel: 'Site analisado',
     updatedLabel: 'Última análise em',

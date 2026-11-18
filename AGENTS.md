@@ -27,7 +27,7 @@ Não há login, cadastro, backend, banco, IA real, análise intermediária ou na
 
 ```text
 Seleção de empresa
-  → Carregamento mockado (1,6s)
+  → Carregamento (1,2s a 8s; pede o resumo executivo ao atue-ai-service)
     → Painel (Visão geral) ⇄ Central de Documentos
 ```
 
@@ -83,14 +83,16 @@ src/
     documents.ts                  copy da Central de Documentos
   components/
     selection/                    escolha de empresa
-    loading/                       carregamento mockado
+    loading/                       carregamento + chamada do resumo executivo
     layout/                        shell, header e footer
     dashboard/                     visão geral, score, prioridades, achados e formulário
     documents/                     anexo, exemplos, análise simulada e downloads
     ui/                            badge, botão, card, alerta, tipografia e ícones
   lib/                            score, severidade, data e classes
   mocks/companies.ts              quatro cenários
+  services/analysis.ts            payload do AI service + fallback local do resumo
   types/                          contratos
+api/analyze.ts                    proxy server-side (única peça com ATUE_API_KEY)
 ```
 
 ## 7. Mocks
@@ -162,8 +164,8 @@ Regras:
 
 ## 12. Restrições
 
-1. Zero backend, APIs, banco, autenticação ou cadastro.
-2. Zero requisições externas.
+1. Sem backend, banco, autenticação ou cadastro. A única chamada de rede é `POST /api/analyze` (mesma origem, função serverless em `api/analyze.ts`) para o resumo executivo.
+2. A única requisição externa permitida é `api/analyze.ts` → `atue-ai-service`, com `ATUE_AI_URL`/`ATUE_API_KEY`. Nenhum segredo com prefixo `VITE_`, nenhuma chamada direta a provider de IA.
 3. Mocks determinísticos.
 4. PDF estático e genérico.
 5. Sem gerador de PDF.

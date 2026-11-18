@@ -9,6 +9,7 @@ import { LoadingScreen } from './components/loading/loading-screen'
 import { SelectionScreen } from './components/selection/selection-screen'
 import { createSimulatedAnalysis } from './lib/simulation'
 import { COMPANIES, getCompanyById } from './mocks/companies'
+import type { ExecutiveSummary } from './services/analysis'
 import type { CompanyId, Finding } from './types/company'
 import type { AppScreen } from './types/ui'
 
@@ -20,6 +21,8 @@ interface Report {
   url: string
   lastAnalysisAt: string
   score: number
+  summary: string
+  aiGenerated: boolean
   findings: readonly Finding[]
 }
 
@@ -27,6 +30,8 @@ const DEFAULT_REPORT: Report = {
   url: DEFAULT_COMPANY.website,
   lastAnalysisAt: DEFAULT_COMPANY.lastAnalysisAt,
   score: DEFAULT_COMPANY.score,
+  summary: DEFAULT_COMPANY.summary,
+  aiGenerated: false,
   findings: DEFAULT_COMPANY.findings,
 }
 
@@ -56,10 +61,21 @@ export default function App() {
       url: selected.website,
       lastAnalysisAt: selected.lastAnalysisAt,
       score: selected.score,
+      summary: selected.summary,
+      aiGenerated: false,
       findings: selected.findings,
     })
     setScreen('dashboard')
     setStage('loading')
+  }
+
+  const handleSummaryReady = (result: ExecutiveSummary) => {
+    setReport((current) => ({
+      ...current,
+      summary: result.summary,
+      aiGenerated: !result.degraded,
+    }))
+    setStage('app')
   }
 
   const handleUrlUpdated = (url: string) => {
@@ -69,6 +85,8 @@ export default function App() {
       url,
       lastAnalysisAt: new Date().toISOString(),
       score: analysis.score,
+      summary: company.summary,
+      aiGenerated: false,
       findings: analysis.findings,
     })
   }
@@ -98,7 +116,7 @@ export default function App() {
         ) : null}
 
         {stage === 'loading' ? (
-          <LoadingScreen company={company} onComplete={() => setStage('app')} />
+          <LoadingScreen company={company} onComplete={handleSummaryReady} />
         ) : null}
 
         {isApp ? (
@@ -108,6 +126,8 @@ export default function App() {
               score={report.score}
               siteUrl={report.url}
               lastAnalysisAt={report.lastAnalysisAt}
+              summary={report.summary}
+              aiGenerated={report.aiGenerated}
               onUrlUpdated={handleUrlUpdated}
               onOpenDocuments={() => setScreen('documents')}
             />

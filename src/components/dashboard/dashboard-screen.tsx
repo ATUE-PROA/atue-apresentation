@@ -13,6 +13,8 @@ interface DashboardScreenProps {
   score: number
   siteUrl: string
   lastAnalysisAt: string
+  summary: string
+  aiGenerated: boolean
   onUrlUpdated: (url: string) => void
   onOpenDocuments: () => void
 }
@@ -22,6 +24,8 @@ export function DashboardScreen({
   score: currentScore,
   siteUrl,
   lastAnalysisAt,
+  summary,
+  aiGenerated,
   onUrlUpdated,
   onOpenDocuments,
 }: DashboardScreenProps) {
@@ -33,6 +37,8 @@ export function DashboardScreen({
         score={currentScore}
         siteUrl={siteUrl}
         lastAnalysisAt={lastAnalysisAt}
+        summary={summary}
+        aiGenerated={aiGenerated}
       />
 
       <div className="mt-8 space-y-6">
