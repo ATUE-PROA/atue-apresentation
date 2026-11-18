@@ -1,22 +1,26 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { localSummary, requestExecutiveSummary } from '../../services/analysis'
+import type { ExecutiveSummary } from '../../services/analysis'
 import type { CompanyProfile } from '../../types/company'
 
 interface LoadingScreenProps {
   company: CompanyProfile
-  onComplete: () => void
+  onComplete: (result: ExecutiveSummary) => void
 }
 
 const STEPS = [
   'Preparando o ambiente...',
   'Organizando indicadores e pendências...',
-  'Montando a visão geral...',
+  'Gerando resumo executivo...',
 ]
 
-const DURATION_MS = 2600
+// the AI call never blocks the demo: at least 1,2 s of loading, at most 8 s
+const MIN_DURATION_MS = 1200
+const MAX_DURATION_MS = 8000
 
 export function LoadingScreen({ company, onComplete }: LoadingScreenProps) {
-  const [progress, setProgress] = useState(0)
+  const [progress, setProgress] = useState(6)
   const onCompleteRef = useRef(onComplete)
 
   useEffect(() => {
@@ -25,22 +29,39 @@ export function LoadingScreen({ company, onComplete }: LoadingScreenProps) {
 
   useEffect(() => {
     const startedAt = Date.now()
-    const interval = window.setInterval(() => {
-      const elapsed = Date.now() - startedAt
-      const next = Math.min(100, Math.round((elapsed / DURATION_MS) * 100))
-      setProgress(next)
-    }, 60)
+    let cancelled = false
+    let finished = false
 
-    const completion = window.setTimeout(() => {
-      setProgress(100)
-      onCompleteRef.current()
-    }, DURATION_MS)
+    const finish = (result: ExecutiveSummary) => {
+      if (cancelled || finished) return
+      finished = true
+
+      const remaining = Math.max(0, MIN_DURATION_MS - (Date.now() - startedAt))
+      window.setTimeout(() => {
+        if (cancelled) return
+        setProgress(100)
+        onCompleteRef.current(result)
+      }, remaining)
+    }
+
+    // asymptotic crawl: the bar never completes before the analysis does
+    const tick = window.setInterval(() => {
+      setProgress((current) => Math.min(95, current + Math.max(1, Math.round((95 - current) / 12))))
+    }, 120)
+
+    const ceiling = window.setTimeout(() => finish(localSummary(company)), MAX_DURATION_MS)
+
+    void requestExecutiveSummary(company).then((result) => {
+      window.clearTimeout(ceiling)
+      finish(result)
+    })
 
     return () => {
-      window.clearInterval(interval)
-      window.clearTimeout(completion)
+      cancelled = true
+      window.clearInterval(tick)
+      window.clearTimeout(ceiling)
     }
-  }, [])
+  }, [company])
 
   const stepIndex = Math.min(STEPS.length - 1, Math.floor((progress / 100) * STEPS.length))
 
@@ -54,16 +75,16 @@ export function LoadingScreen({ company, onComplete }: LoadingScreenProps) {
         <img
           src="/brand/atue-logo-light.svg"
           alt="ATUE"
-          width={839}
-          height={302}
+          width={3801}
+          height={1418}
           className="mx-auto h-9 w-auto dark:hidden"
         />
         <img
           src="/brand/atue-logo-dark.svg"
           alt=""
           aria-hidden="true"
-          width={839}
-          height={302}
+          width={3801}
+          height={1418}
           className="mx-auto hidden h-9 w-auto dark:block"
         />
 

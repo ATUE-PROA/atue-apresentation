@@ -8,9 +8,17 @@ interface DashboardHeaderProps {
   score: number
   siteUrl: string
   lastAnalysisAt: string
+  summary: string
+  aiGenerated: boolean
 }
 
-export function DashboardHeader({ score, siteUrl, lastAnalysisAt }: DashboardHeaderProps) {
+export function DashboardHeader({
+  score,
+  siteUrl,
+  lastAnalysisAt,
+  summary,
+  aiGenerated,
+}: DashboardHeaderProps) {
   const level = getScoreLevel(score)
   const { page } = DIAGNOSTICS_CONTENT
 
@@ -20,7 +28,10 @@ export function DashboardHeader({ score, siteUrl, lastAnalysisAt }: DashboardHea
         <div className="min-w-0">
           <h1 className="mt-3 text-display text-foreground">{page.title}</h1>
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
-            {page.description}
+            {summary}
+          </p>
+          <p className="mt-2 text-xs font-medium tracking-[0.14em] text-muted-foreground uppercase">
+            {aiGenerated ? 'Resumo gerado com IA' : 'Resumo local'}
           </p>
         </div>
 
