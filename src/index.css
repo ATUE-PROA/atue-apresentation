@@ -3,19 +3,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @font-face {
-  font-family: 'Geist Variable';
+  font-family: 'Archivo Variable';
   font-style: normal;
   font-display: swap;
   font-weight: 100 900;
-  src: url('./assets/fonts/geist-latin-wght-normal.woff2') format('woff2-variations');
-}
-
-@font-face {
-  font-family: 'Fraunces Variable';
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url('./assets/fonts/fraunces-latin-wght-normal.woff2') format('woff2-variations');
+  src: url('./assets/fonts/archivo-latin-wght-normal.woff2') format('woff2-variations');
 }
 
 :root {
@@ -37,6 +29,11 @@
   --surface-foreground: #ffffff;
   --surface-muted: #a0a0a0;
   --surface-border: rgb(255 255 255 / 0.12);
+
+  --radius: 1rem;
+  --card-radius: 1.5rem;
+  --shadow-card: 0 2px 12px rgb(10 10 10 / 0.08);
+  --shadow-card-hover: 0 12px 28px -12px rgb(10 10 10 / 0.18);
 }
 
 /* Tema escuro por escolha do usuário (persistida em localStorage). */
@@ -62,9 +59,8 @@
 }
 
 @theme inline {
-  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, sans-serif;
-  --font-heading: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Archivo Variable', system-ui, sans-serif;
+  --font-heading: 'Archivo Variable', system-ui, sans-serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -85,6 +81,9 @@
 }
 
 html {
+  /* Escala base de 19.2px: mesma leitura do site institucional.
+     Tokens em rem (tipografia, espaçamento, raios, containers) acompanham. */
+  font-size: 120%;
   scrollbar-gutter: stable;
   scrollbar-color: var(--border) var(--background);
   background-color: var(--background);
@@ -108,7 +107,7 @@ body {
 
 h1 {
   font-family: var(--font-heading);
-  font-weight: 550;
+  font-weight: 700;
   letter-spacing: -0.02em;
   text-wrap: balance;
 }
@@ -120,8 +119,8 @@ h4 {
 }
 
 ::selection {
-  background-color: rgb(37 99 235 / 0.18);
-  color: var(--foreground);
+  background-color: var(--primary);
+  color: var(--primary-foreground);
 }
 
 dialog::backdrop {
@@ -130,16 +129,36 @@ dialog::backdrop {
 
 @utility text-section {
   font-family: var(--font-heading);
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
 @utility text-display {
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 5vw, 3.75rem);
+  font-size: clamp(2rem, 5.4vw, 4rem);
+  font-weight: 700;
   line-height: 1.05;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
   text-wrap: balance;
+}
+
+@utility text-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+@utility card-surface {
+  border-radius: var(--card-radius);
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: var(--shadow-card);
+}
+
+@utility card-interactive {
+  cursor: pointer;
+  transition: all 200ms ease-out;
 }

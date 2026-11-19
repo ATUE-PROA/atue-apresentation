@@ -9,22 +9,21 @@ interface SelectionScreenProps {
 
 export function SelectionScreen({ companies, onSelect }: SelectionScreenProps) {
   return (
-    <div className="mx-auto w-full max-w-3xl px-6 py-12">
+    <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col justify-center px-6 py-12">
       <SectionHeading
-        eyebrow="Painel de conformidade"
         title="Escolha uma empresa"
         description="Selecione uma empresa para abrir o painel com score, pendências e recomendações."
       />
 
-      <ul className="mt-8 border-t border-border">
+      <ul className="mt-8 grid gap-4 sm:grid-cols-2">
         {companies.map((company, index) => (
-          <li key={company.id} className="border-b border-border">
+          <li key={company.id}>
             <button
               type="button"
               onClick={() => onSelect(company.id)}
-              className="group grid w-full grid-cols-[2rem_1fr_auto] items-center gap-4 px-2 py-5 text-left transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/50"
+              className="card-surface group grid w-full cursor-pointer grid-cols-[2rem_1fr_auto] items-center gap-4 p-5 text-left transition-all duration-200 hover:scale-[1.02] hover:shadow-[var(--shadow-card-hover)] focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:outline-none motion-reduce:transform-none motion-reduce:transition-none"
             >
-              <span aria-hidden="true" className="font-mono text-xs text-muted-foreground">
+              <span aria-hidden="true" className="text-xs text-muted-foreground tabular-nums">
                 {String(index + 1).padStart(2, '0')}
               </span>
               <span className="min-w-0">
@@ -35,7 +34,7 @@ export function SelectionScreen({ companies, onSelect }: SelectionScreenProps) {
                   {company.segment}
                 </span>
               </span>
-              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary dark:text-blue-400">
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-foreground group-hover:underline">
                 <span className="sm:hidden">Abrir</span>
                 <span className="hidden sm:inline">Ver dashboard</span>
                 <ArrowRight

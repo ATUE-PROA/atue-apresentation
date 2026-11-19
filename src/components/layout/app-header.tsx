@@ -35,8 +35,8 @@ export function AppHeader({ screen, showNavigation, onNavigate, onBack }: AppHea
   )
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/80 backdrop-blur-xl backdrop-saturate-150">
-      <div className="relative mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-6">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl backdrop-saturate-150">
+      <div className="relative mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-6">
         {onBack ? (
           <button
             type="button"
@@ -72,7 +72,7 @@ export function AppHeader({ screen, showNavigation, onNavigate, onBack }: AppHea
                     }`}
                   >
                     <Icon aria-hidden="true" className="size-4" />
-                    <span className="hidden min-[380px]:inline">{label}</span>
+                    <span className="hidden min-[460px]:inline">{label}</span>
                   </button>
                 )
               })}

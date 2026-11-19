@@ -3,7 +3,7 @@ export const DOCUMENTS_CONTENT = {
     eyebrow: 'Diagnóstico, análise e downloads',
     title: 'Central de Documentos',
     description:
-      'Anexe um documento do seu computador ou use um exemplo, solicite a análise e baixe relatórios e modelos em PDF, DOCX ou TXT.',
+      'Anexe um documento do seu computador ou use um exemplo, solicite a análise simulada e baixe relatórios e modelos em PDF, DOCX ou TXT.',
   },
   tabs: {
     analyze: 'Analisar documento',
@@ -23,23 +23,26 @@ export const DOCUMENTS_CONTENT = {
       'Escolha um documento de exemplo para percorrer o fluxo sem anexar um arquivo do dispositivo.',
     exampleLabel: 'Documento de exemplo',
     exampleEmpty: 'Nenhum documento selecionado',
-    exampleHint: 'Lista ilustrativa. O seletor de arquivos do sistema não é aberto por este campo.',
-    analyze: 'Analisar documento',
+    exampleHint: 'Lista fictícia. O seletor de arquivos do sistema não é aberto por este campo.',
+    analyze: 'Simular análise',
     analyzeDisabledHint: 'Escolha um documento de exemplo ou anexe um arquivo para habilitar a análise.',
     analyzing: 'Analisando documento...',
     analysisSuccessTitle: 'Análise concluída',
     analysisSuccessDescription:
       'O resultado foi gerado localmente e não foi enviado a nenhum serviço externo.',
-    infoTitle: 'Análise local',
+    infoTitle: 'Esta análise é uma simulação local',
     infoDescription:
-      'Nenhum conteúdo é enviado a serviços externos. A análise é determinística e não substitui uma auditoria.',
+      'Nenhum conteúdo é enviado ou processado por um modelo de IA real. A análise é determinística e serve apenas para demonstrar o fluxo do produto.',
     fileStays:
-      'O arquivo permanece no seu dispositivo. Apenas nome, tipo e tamanho são usados na análise.',
+      'O arquivo permanece no seu dispositivo. Nesta demonstração, apenas nome, tipo e tamanho são usados para simular a análise.',
     fullSend: 'Precisa enviar vários documentos? Use o envio completo',
     fullSendNote:
       'O envio completo faz parte do produto ATUE. Aqui, use a análise de um documento por vez.',
   },
   examples: {
+    searchLabel: 'Buscar documento de exemplo',
+    searchPlaceholder: 'Nome, tipo ou descrição',
+    searchEmpty: 'Nenhum documento de exemplo corresponde à busca.',
     title: 'Documentos de exemplo',
     description:
       'Também é possível usar um documento de exemplo desta lista. Nenhum arquivo do seu dispositivo é acessado nesse caso.',
