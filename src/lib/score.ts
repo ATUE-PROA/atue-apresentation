@@ -11,23 +11,13 @@ export interface ScoreLevel {
 }
 
 export function getScoreLevel(score: number): ScoreLevel {
-  if (score < 25) {
+  if (score < 50) {
     return {
       label: 'Crítico',
-      description: 'A operação precisa de correções prioritárias antes de avançar.',
+      description: 'Existem lacunas relevantes que exigem um plano de adequação.',
       color: '#ef4444',
       textClass: 'text-red-600 dark:text-red-400',
       dotClass: 'bg-red-500',
-    }
-  }
-
-  if (score < 50) {
-    return {
-      label: 'Atenção',
-      description: 'Existem lacunas relevantes que exigem um plano de adequação.',
-      color: '#f97316',
-      textClass: 'text-orange-700 dark:text-orange-400',
-      dotClass: 'bg-orange-500',
     }
   }
 

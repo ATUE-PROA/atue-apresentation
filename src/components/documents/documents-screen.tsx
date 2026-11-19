@@ -48,9 +48,14 @@ export function DocumentsScreen({ onAnalyzed }: DocumentsScreenProps) {
   const [fileError, setFileError] = useState<string | null>(null)
   const [analysisStatus, setAnalysisStatus] = useState<AnalysisStatus>('idle')
   const [showFullSendNote, setShowFullSendNote] = useState(false)
+  const [exampleSearch, setExampleSearch] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const selectedExample = EXAMPLE_DOCUMENTS.find((doc) => doc.id === selectedExampleId)
+  const searchTerm = exampleSearch.trim().toLowerCase()
+  const visibleExamples = EXAMPLE_DOCUMENTS.filter((document) =>
+    `${document.title} ${document.type}`.toLowerCase().includes(searchTerm),
+  )
 
   const handleFile = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -104,19 +109,18 @@ export function DocumentsScreen({ onAnalyzed }: DocumentsScreenProps) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl flex-1 px-6 py-10">
-      <p className="text-xs font-medium tracking-[0.2em] text-primary uppercase dark:text-blue-400">
-        {DOCUMENTS_CONTENT.page.eyebrow}
-      </p>
-      <h1 className="mt-3 text-display text-foreground">{DOCUMENTS_CONTENT.page.title}</h1>
-      <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted-foreground">
+    <div className="mx-auto w-full max-w-7xl flex-1 px-6 py-8">
+      <h1 className="text-3xl font-bold tracking-tight text-foreground">
+        {DOCUMENTS_CONTENT.page.title}
+      </h1>
+      <p className="mt-2 max-w-3xl text-base leading-relaxed text-muted-foreground">
         {DOCUMENTS_CONTENT.page.description}
       </p>
 
       <div
         role="tablist"
         aria-label="Áreas da Central de Documentos"
-        className="mt-8 inline-flex rounded-lg border border-border bg-muted p-1"
+        className="mt-8 flex w-full max-w-md rounded-lg border border-border bg-muted p-1"
       >
         <button
           type="button"
@@ -125,7 +129,7 @@ export function DocumentsScreen({ onAnalyzed }: DocumentsScreenProps) {
           aria-controls="documents-analyze-panel"
           id="documents-analyze-tab"
           onClick={() => setTab('analyze')}
-          className={`inline-flex h-auto min-h-9 items-center rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+          className={`inline-flex h-auto min-h-9 flex-1 items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
             tab === 'analyze'
               ? 'border border-border bg-background text-foreground shadow-sm'
               : 'text-muted-foreground hover:text-foreground'
@@ -140,7 +144,7 @@ export function DocumentsScreen({ onAnalyzed }: DocumentsScreenProps) {
           aria-controls="documents-downloads-panel"
           id="documents-downloads-tab"
           onClick={() => setTab('downloads')}
-          className={`inline-flex h-auto min-h-9 items-center rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+          className={`inline-flex h-auto min-h-9 flex-1 items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
             tab === 'downloads'
               ? 'border border-border bg-background text-foreground shadow-sm'
               : 'text-muted-foreground hover:text-foreground'
@@ -157,7 +161,7 @@ export function DocumentsScreen({ onAnalyzed }: DocumentsScreenProps) {
           aria-labelledby="documents-analyze-tab"
           className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]"
         >
-          <section className="rounded-xl bg-card p-6 ring-1 ring-border">
+          <section className="card-surface p-6">
             <h2 className="text-lg font-semibold tracking-tight text-foreground">
               {DOCUMENTS_CONTENT.analyze.title}
             </h2>
@@ -345,7 +349,7 @@ export function DocumentsScreen({ onAnalyzed }: DocumentsScreenProps) {
             ) : null}
           </section>
 
-          <section className="rounded-xl bg-card p-6 ring-1 ring-border">
+          <section className="card-surface p-6">
             <h2 className="text-lg font-semibold tracking-tight text-foreground">
               {DOCUMENTS_CONTENT.examples.title}
             </h2>
@@ -353,8 +357,25 @@ export function DocumentsScreen({ onAnalyzed }: DocumentsScreenProps) {
               {DOCUMENTS_CONTENT.examples.description}
             </p>
 
-            <ul className="mt-4 space-y-2">
-              {EXAMPLE_DOCUMENTS.map((document) => {
+            <div className="mt-4">
+              <label
+                htmlFor="examples-search"
+                className="text-xs font-medium text-foreground"
+              >
+                {DOCUMENTS_CONTENT.examples.searchLabel}
+              </label>
+              <input
+                id="examples-search"
+                type="search"
+                value={exampleSearch}
+                onChange={(event) => setExampleSearch(event.target.value)}
+                placeholder={DOCUMENTS_CONTENT.examples.searchPlaceholder}
+                className="mt-1.5 h-10 w-full rounded-[16px] border border-input bg-card px-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-blue-600 focus-visible:ring-2 focus-visible:ring-blue-600/30 focus-visible:outline-none"
+              />
+            </div>
+
+            <ul className="mt-3 space-y-2">
+              {visibleExamples.map((document) => {
                 const isSelected = selectedExampleId === document.id
 
                 return (
@@ -387,6 +408,12 @@ export function DocumentsScreen({ onAnalyzed }: DocumentsScreenProps) {
               })}
             </ul>
 
+            {visibleExamples.length === 0 ? (
+              <p className="mt-3 text-sm text-muted-foreground">
+                {DOCUMENTS_CONTENT.examples.searchEmpty}
+              </p>
+            ) : null}
+
             <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
               {DOCUMENTS_CONTENT.examples.hint}
             </p>
@@ -399,7 +426,7 @@ export function DocumentsScreen({ onAnalyzed }: DocumentsScreenProps) {
           aria-labelledby="documents-downloads-tab"
           className="mt-6"
         >
-          <section className="rounded-xl bg-card p-6 ring-1 ring-border">
+          <section className="card-surface p-6">
             <h2 className="text-lg font-semibold tracking-tight text-foreground">
               {DOCUMENTS_CONTENT.downloads.title}
             </h2>

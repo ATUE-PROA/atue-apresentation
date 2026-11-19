@@ -1,71 +1,35 @@
 import { DIAGNOSTICS_CONTENT } from '../../content/diagnostics'
-import { formatDateTime } from '../../lib/format'
-import { getScoreLevel } from '../../lib/score'
 import { buttonClasses } from '../ui/button-styles'
-import { Globe, RefreshCcw } from '../ui/icons'
+import { FlaskConical, RefreshCcw } from '../ui/icons'
 
 interface DashboardHeaderProps {
-  score: number
-  siteUrl: string
-  lastAnalysisAt: string
   summary: string
   aiGenerated: boolean
 }
 
-export function DashboardHeader({
-  score,
-  siteUrl,
-  lastAnalysisAt,
-  summary,
-  aiGenerated,
-}: DashboardHeaderProps) {
-  const level = getScoreLevel(score)
-  const { page } = DIAGNOSTICS_CONTENT
+export function DashboardHeader({ summary, aiGenerated }: DashboardHeaderProps) {
+  const { page, summary: summaryCopy } = DIAGNOSTICS_CONTENT
 
   return (
-    <header className="border-b border-border pb-8">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-        <div className="min-w-0">
-          <h1 className="mt-3 text-display text-foreground">{page.title}</h1>
-          <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
-            {summary}
-          </p>
-          <p className="mt-2 text-xs font-medium tracking-[0.14em] text-muted-foreground uppercase">
-            {aiGenerated ? 'Resumo gerado com IA' : 'Resumo local'}
-          </p>
-        </div>
-
-        <a
-          href="#novo-diagnostico"
-          className={buttonClasses('brand', 'xl', 'w-full sm:w-auto')}
-        >
-          <RefreshCcw aria-hidden="true" className="size-4" />
-          {page.ctaUpdate}
-        </a>
+    <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="min-w-0">
+        <p className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+          <FlaskConical aria-hidden="true" className="size-3.5" />
+          {page.demoBadge}
+        </p>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground">{page.title}</h1>
+        <p className="mt-2 line-clamp-2 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:line-clamp-none">
+          <span className="font-medium text-foreground">{summaryCopy.title}.</span> {summary}{' '}
+          <span className="text-xs">
+            · {aiGenerated ? summaryCopy.aiLabel : summaryCopy.localLabel}
+          </span>
+        </p>
       </div>
 
-      <dl className="mt-6 flex flex-col gap-2 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6">
-        <div className="flex items-center gap-2">
-          <dt className="text-muted-foreground">{page.statusLabel}:</dt>
-          <dd className="flex items-center gap-1.5 font-medium">
-            <span aria-hidden="true" className={`size-2.5 rounded-full ${level.dotClass}`} />
-            <span className={level.textClass}>{level.label}</span>
-          </dd>
-        </div>
-
-        <div className="flex min-w-0 items-center gap-2">
-          <dt className="shrink-0 text-muted-foreground">{page.urlLabel}:</dt>
-          <dd className="flex min-w-0 items-center gap-1.5 font-medium text-foreground">
-            <Globe aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
-            <span className="break-all">{siteUrl}</span>
-          </dd>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <dt className="text-muted-foreground">{page.updatedLabel}</dt>
-          <dd className="font-medium text-foreground">{formatDateTime(lastAnalysisAt)}</dd>
-        </div>
-      </dl>
+      <a href="#novo-diagnostico" className={buttonClasses('brand', 'xl', 'w-full sm:w-auto')}>
+        <RefreshCcw aria-hidden="true" className="size-4" />
+        {page.ctaUpdate}
+      </a>
     </header>
   )
 }

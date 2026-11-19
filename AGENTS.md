@@ -52,7 +52,7 @@ Seleção de empresa
 - Tailwind CSS v4, tokens em `src/index.css`.
 - SPA sem router; estado em `src/App.tsx`.
 - Sem Lucide/Recharts/Radix: ícones SVG inline, score em SVG nativo e accordion local.
-- Fontes locais Geist e Fraunces.
+- Fonte local Archivo Variable (`src/assets/fonts/`).
 - Logo oficial em `public/brand/`.
 - Sem test runner.
 - Tema claro.
